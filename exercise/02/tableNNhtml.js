@@ -1,5 +1,5 @@
 function table99() {
-    let N = 1000
+    let N = 10
     let table = ["<table><tr><th></th>"]
     for (let h = 1; h <= N; h++) {
         table.push(`<th>${h}</th>`)
