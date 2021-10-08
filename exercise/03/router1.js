@@ -1,34 +1,15 @@
-import { Application, Router } from "https://deno.land/x/oak/mod.ts";
+import { Application, Router, send } from "https://deno.land/x/oak/mod.ts";
 
-const books = new Map();
-books.set("1", {
-    id: "1",
-    title: "The Hound of the Baskervilles",
-    author: "Conan Doyle, Arthur",
-});
-books.set("2", {
-    id: "2",
-    title: "The Old Man",
-    author: "Lee Ear",
-});
-books.set("3", {
-    id: "3",
-    title: "The Toilet",
-    author: "W.C.",
-});
 const router = new Router();
 router
-    .get("/", (context) => {
-        context.response.body = "Hello world!";
+    .get("/(.*)", async (context) => {
+        let wpath = context.params[0]
+        console.log('wpath=', wpath)
+        await send(context, wpath, {
+            root: Deno.cwd()+"/public/",
+            index: "table99.html",
+        })
     })
-    .get("/book", (context) => {
-        context.response.body = Array.from(books.values());
-    })
-    .get("/book/:id", (context) => {
-        if (context.params && context.params.id && books.has(context.params.id)) {
-            context.response.body = books.get(context.params.id);
-        }
-    });
 
 const app = new Application();
 app.use(router.routes());
